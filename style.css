@@ -254,6 +254,8 @@
       flex-direction: column;
       gap: 10px;
       transition: transform .3s, border-color .3s;
+      filter: brightness(1.05) saturate(1.12);
+      background-color: #111;
     }
     .photo-card:hover { transform: scale(1.03); border-color: var(--red); }
     .photo-card .photo-placeholder-icon {
@@ -751,7 +753,7 @@
       nav { padding: 0 16px; }
       .nav-links { display: none; }
       .hero-content { padding: 40px 20px; }
-      .photos-grid { grid-template-columns: 1fr 1fr; }
+      .photos-grid { grid-template-columns: 1fr; }
       .offerings-grid { grid-template-columns: 1fr; }
       .plans-grid { grid-template-columns: 1fr; }
       .reviews-grid { grid-template-columns: 1fr; }
