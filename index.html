@@ -273,6 +273,68 @@
     </div>
   </section>
 
+  <!-- CONTACT FORM -->
+  <section class="form-section" id="form">
+    <div class="section-header fade-up">
+      <div class="section-tag">Enquiry</div>
+      <h2 class="section-title">Submit Your <span>Membership Request</span></h2>
+      <p class="section-sub">Fill out this form and our team will contact you to confirm details, answer questions, or book a free gym visit.</p>
+    </div>
+    <div class="form-frame fade-up" id="native-form-container">
+      <script>var submitted=false;</script>
+      <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) { document.getElementById('native-form').style.display='none'; document.getElementById('form-success').style.display='block'; }"></iframe>
+      
+      <form id="native-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfMkqh-cDOQMCy-_xwfgdSgKDXCGxtfrV_TcDdfPsn0sLvN4w/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" name="entry.1125457451" required class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="entry.2051213377" required class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Contact Number *</label>
+            <input type="tel" name="entry.1516539301" required class="form-control">
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Number</label>
+            <input type="tel" name="entry.681845713" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Goal</label>
+            <select name="entry.725932978" class="form-control">
+              <option value="">-- Optional --</option>
+              <option value="Weight Gain">Weight Gain</option>
+              <option value="Weight Loss">Weight Loss</option>
+              <option value="General Fitness">General Fitness</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>How did you know about us?</label>
+            <input type="text" name="entry.1265182983" class="form-control" placeholder="Optional">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Full Address</label>
+          <textarea name="entry.280068511" rows="3" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Submit Request</button>
+      </form>
+      
+      <div id="form-success" style="display:none; text-align:center; padding: 60px 20px;">
+        <div style="font-size: 64px; margin-bottom:20px;">✅</div>
+        <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--white); margin-bottom: 10px; letter-spacing: 1px;">Request Received!</h3>
+        <p style="color: var(--muted); font-size: 16px;">Thank you. Our team will contact you very soon to confirm your details.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- GOOGLE REVIEWS -->
   <section class="reviews-section" id="reviews">
     <div class="reviews-header fade-up">
@@ -392,6 +454,7 @@
         <li><a href="#photos">Gallery</a></li>
         <li><a href="#offerings">Our Services</a></li>
         <li><a href="#membership">Membership Plans</a></li>
+        <li><a href="#form">Membership Form</a></li>
         <li><a href="#why">Why Choose Us</a></li>
         <li><a href="#reviews">Reviews</a></li>
       </ul>
