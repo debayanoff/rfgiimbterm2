@@ -1,26 +1,30 @@
 const GOOGLE_SHEETS_WEB_APP = 'https://script.google.com/macros/s/AKfycbxBAz_56hV_8rc_kAXR5bVgIOc9N-XWzSH7IkX5illRfGROHZvsM6of1lMGYrlXp54/exec';
 
+/**
+ * Sends a row of data to Google Sheets via the deployed Apps Script web app.
+ * Uses no-cors + form encoding — required for Google Apps Script from browser.
+ */
 async function sendGoogleSheetRow(payload) {
-  if (!GOOGLE_SHEETS_WEB_APP || GOOGLE_SHEETS_WEB_APP.includes('REPLACE_WITH_DEPLOYED_URL')) {
-    console.warn('Google Sheets web app URL is not configured.');
-    return null;
+  if (!GOOGLE_SHEETS_WEB_APP || GOOGLE_SHEETS_WEB_APP.includes('REPLACE_WITH')) {
+    console.warn('Google Sheets URL not configured.');
+    return;
   }
 
   try {
-    const response = await fetch(GOOGLE_SHEETS_WEB_APP, {
+    // Build a URL-encoded form body — Apps Script requires this for no-cors requests
+    const formBody = Object.entries(payload)
+      .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v ?? ''))
+      .join('&');
+
+    // no-cors is required — Apps Script does not send CORS headers for POST
+    // Response will be opaque (unreadable) but the data WILL arrive.
+    await fetch(GOOGLE_SHEETS_WEB_APP, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      mode: 'cors'
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formBody
     });
-
-    if (!response.ok) {
-      throw new Error(`Google Sheets request failed: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.warn('Google Sheets sync failed:', error);
-    return null;
+  } catch (err) {
+    console.warn('Google Sheets sync error:', err);
   }
 }
