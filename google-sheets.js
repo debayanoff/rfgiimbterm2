@@ -1,4 +1,4 @@
-const GOOGLE_SHEETS_WEB_APP = 'https://script.google.com/macros/s/AKfycbxBAz_56hV_8rc_kAXR5bVgIOc9N-XWzSH7IkX5illRfGROHZvsM6of1lMGYrlXp54/exec';
+const GOOGLE_SHEETS_WEB_APP = 'https://script.google.com/macros/s/AKfycbzP0osl-TkXv2-XgF-fAG9BedH0h0bSOs-2jiOAKpu5pdJiuGpkkZUjd3J-HDiJ25e9/exec';
 
 /**
  * Sends a row of data to Google Sheets via the deployed Apps Script web app.
