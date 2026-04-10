@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw Fitness Gym - Secure Payment</title>
+    <link rel="stylesheet" href="payment.css">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-card">
+            <div class="payment-header">
+                <h2>Complete Your Purchase</h2>
+                <p>Secure payment for your Raw Fitness Gym membership.</p>
+            </div>
+            
+            <div class="plan-summary">
+                <span id="planName" class="plan-name">Pro Membership (Monthly)</span>
+                <span id="planPrice" class="plan-price">$49.99</span>
+            </div>
+
+            <form action="#" method="POST" class="payment-form">
+                <div id="upi-inputs">
+                    <div class="qr-placeholder">
+                        <img id="qrCodeImg" src="" alt="Scan to Pay" style="width: 160px; height: 160px; border-radius: 8px; margin-bottom: 12px; background: white; padding: 10px;">
+                        <p style="color: var(--white); font-size: 16px; margin-bottom: 6px;">Pay to UPI ID: <strong>debayanoff@okhdfcbank</strong></p>
+                        Scan using any UPI app like GPay, PhonePe, Paytm
+                    </div>
+                    <div class="input-group" style="margin-top: 16px;">
+                        <label for="upi-ref">Transaction Reference / UTR</label>
+                        <input type="text" id="upi-ref" name="upi-ref" placeholder="Enter 12-digit UTR number">
+                    </div>
+                </div>
+                
+                <button type="submit" class="payment-btn">
+                    <span id="payBtnAmount">Pay $49.99 securely</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </button>
+            </form>
+            
+            <div class="payment-footer">
+                <p>Payments are 256-bit encrypted and secure.</p>
+                <a href="terms.html" class="back-link">Terms & Conditions</a>
+                <a href="index.html" class="back-link">← Cancel and Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const plans = {
+            starter: { name: 'Starter Membership (Monthly)', price: '₹999', amount: '999' },
+            power: { name: 'Power Membership (Quarterly)', price: '₹2,499', amount: '2499' },
+            elite: { name: 'Elite Membership (Half Yearly)', price: '₹4,499', amount: '4499' },
+            champion: { name: 'Champion Membership (Yearly)', price: '₹7,999', amount: '7999' }
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const planKey = urlParams.get('plan') || 'starter';
+        const selectedPlan = plans[planKey] || plans['starter'];
+
+        document.getElementById('planName').textContent = selectedPlan.name;
+        document.getElementById('planPrice').textContent = selectedPlan.price;
+        document.getElementById('payBtnAmount').textContent = 'Pay ' + selectedPlan.price + ' securely';
+
+        const upiString = `upi://pay?pa=debayanoff@okhdfcbank&pn=RAW Fitness Gym&am=${selectedPlan.amount}&cu=INR`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+        document.getElementById('qrCodeImg').src = qrUrl;
+
+    </script>
+</body>
+</html>

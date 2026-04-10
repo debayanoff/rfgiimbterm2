@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw Fitness Gym - Login</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="google-sheets.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Select your access type to continue.</p>
+            </div>
+            <div id="loginChoice" class="login-choice">
+                <p class="login-choice-text">I am a:</p>
+                <div class="choice-actions">
+                    <button type="button" id="memberButton" class="choice-btn">Member</button>
+                    <a href="admin.html" class="choice-btn choice-link">Admin</a>
+                </div>
+            </div>
+            <form id="loginForm" action="#" method="POST" class="login-form hidden">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                <button type="submit" class="login-btn">Log In</button>
+            </form>
+            <div id="loginMessage" class="form-message"></div>
+            <div class="login-footer">
+                <p>Don't have an account? <a href="register.html">Sign up here</a></p>
+                <p class="footer-terms">View our <a href="terms.html">Terms & Conditions</a>.</p>
+                <a href="index.html" class="back-link">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const loginMessage = document.getElementById('loginMessage');
+
+        function showLoginMessage(text, isError = true) {
+            loginMessage.textContent = text;
+            loginMessage.style.color = isError ? '#ff6b6b' : '#7ce3a3';
+            loginMessage.style.margin = '16px 0';
+        }
+
+        const memberButton = document.getElementById('memberButton');
+        const loginChoice = document.getElementById('loginChoice');
+
+        memberButton.addEventListener('click', () => {
+            loginChoice.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+
+            const users = JSON.parse(localStorage.getItem('rawRegisteredUsers') || '[]');
+            const user = users.find((user) => user.email === email);
+            const loginHistory = JSON.parse(localStorage.getItem('rawLoginHistory') || '[]');
+            const isValid = user && user.password === password;
+
+            loginHistory.unshift({
+                email,
+                timestamp: Date.now(),
+                status: isValid ? 'Success' : 'Failure'
+            });
+            localStorage.setItem('rawLoginHistory', JSON.stringify(loginHistory));
+            sendGoogleSheetRow({
+              type: 'login',
+              email,
+              timestamp: Date.now(),
+              status: isValid ? 'Success' : 'Failure'
+            });
+
+            if (!user) {
+                showLoginMessage('No account found for this email. Please register first.');
+                return;
+            }
+
+            if (!isValid) {
+                showLoginMessage('Incorrect password. Please check your credentials.');
+                return;
+            }
+
+            localStorage.setItem('currentUser', JSON.stringify({name: user.name, email: user.email}));
+            showLoginMessage('Login successful! Redirecting...', false);
+            setTimeout(() => {
+                // Check if we were sent here from the offline payment flow
+                const redirect = localStorage.getItem('postLoginRedirect') || 'user-dashboard.html';
+                localStorage.removeItem('postLoginRedirect');
+                window.location.href = redirect;
+            }, 700);
+        });
+    </script>
+</body>
+</html>

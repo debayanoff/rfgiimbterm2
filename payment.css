@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Bebas+Neue&display=swap');
+
+:root {
+  --black:   #0a0a0a;
+  --dark:    #111111;
+  --card:    #181818;
+  --border:  #2a2a2a;
+  --red:     #e8192c;
+  --red2:    #ff3b4e;
+  --gold:    #f5c518;
+  --white:   #f2f2f2;
+  --muted:   #888888;
+  --radius:  8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Barlow', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--black);
+    color: var(--white);
+    position: relative;
+    padding: 20px;
+}
+
+.payment-container {
+    width: 100%;
+    max-width: 500px;
+    z-index: 10;
+}
+
+.payment-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.5);
+    padding: 48px 40px;
+    box-shadow: 0 10px 40px rgba(245, 197, 24, 0.05); /* slightly golden shadow */
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.payment-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.payment-header p {
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.plan-summary {
+    background: #111;
+    border: 1px solid rgba(245, 197, 24, 0.2);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.plan-name {
+    color: var(--white);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.plan-price {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 18px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.row-group {
+    display: flex;
+    gap: 16px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+}
+
+.input-group.half {
+    flex: 1;
+}
+
+.input-group label {
+    font-family: 'Barlow Condensed', sans-serif;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    color: var(--white);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--gold);
+    background: #161616;
+    box-shadow: 0 0 0 4px rgba(245, 197, 24, 0.12);
+}
+
+.payment-btn {
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.payment-btn:hover {
+    background: #ffd644;
+    transform: translateY(-2px);
+}
+
+.payment-footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.payment-footer p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--white);
+}
+
+
+#upi-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.qr-placeholder {
+    width: 100%;
+    margin-top: 5px;
+    background: #111;
+    border: 1px dashed rgba(255,255,255,0.2);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .payment-card {
+        padding: 32px 24px;
+    }
+    .row-group {
+        flex-direction: column;
+        gap: 16px;
+    }
+}

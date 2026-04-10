@@ -9,7 +9,7 @@
       --gold:    #f5c518;
       --white:   #f2f2f2;
       --muted:   #888888;
-      --radius:  4px;
+      --radius:  8px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -200,6 +200,7 @@
       line-height: 1;
       color: var(--white);
     }
+
     .stat-label {
       font-size: 11px;
       letter-spacing: 2px;
@@ -253,11 +254,16 @@
       justify-content: center;
       flex-direction: column;
       gap: 10px;
-      transition: transform .3s, border-color .3s;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       filter: brightness(1.05) saturate(1.12);
       background-color: #111;
     }
-    .photo-card:hover { transform: scale(1.03); border-color: var(--red); }
+    .photo-card:hover {
+      transform: scale(1.12);
+      border-color: var(--red);
+      z-index: 10;
+      box-shadow: 0 25px 45px rgba(232, 25, 44, 0.35);
+    }
     .photo-card .photo-placeholder-icon {
       font-size: 42px;
       opacity: 0.18;
