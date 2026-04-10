@@ -1,60 +1,43 @@
 /**
  * Google Apps Script — RAW FITNESS GYM Data Receiver
- * Handles POST requests from the website and writes rows into Google Sheets.
+ * Receives data via GET request URL parameters from the website.
  *
  * HOW TO DEPLOY:
  * 1. Open your Google Sheet → Extensions → Apps Script
- * 2. Replace all code with this file
- * 3. Click Deploy → New Deployment → Web App
+ * 2. Replace all existing code with this entire file
+ * 3. Click Save (💾)
+ * 4. Click Deploy → New Deployment → Web App
  *    - Execute as: Me
  *    - Who has access: Anyone
- * 4. Copy the Web App URL into google-sheets.js
+ * 5. Authorise if prompted → copy the new Web App URL
+ * 6. Paste that URL into google-sheets.js line 1
+ * 7. Commit and push to GitHub
  */
 
 const SHEET_ID = '1ejbbCVqty-_EZN9nvGpiRPEkS08A8IfJvjKM-mFl4Gc';
 
+// ── Main entry point (GET request with URL params) ──────────────────────────
 function doGet(e) {
-  // Allow GET requests too (some browsers send preflight as GET)
-  return doPost(e);
-}
-
-function doPost(e) {
   const result = { success: false };
 
   try {
-    let payload = {};
+    const data = e.parameter || {};
 
-    // Try parsing as JSON first, then fall back to form parameters
-    if (e.postData && e.postData.contents) {
-      try {
-        payload = JSON.parse(e.postData.contents);
-      } catch (_) {
-        // Not JSON — parse as URL-encoded form data
-        payload = parseFormData(e.postData.contents);
-      }
-    } else if (e.parameter) {
-      // GET or form params
-      payload = e.parameter;
-    }
-
-    if (!payload.type) {
-      throw new Error('Missing payload type');
+    if (!data.type) {
+      // If no type param, return a simple health-check response
+      return ContentService
+        .createTextOutput(JSON.stringify({ status: 'RAW FITNESS GYM sheet is live' }))
+        .setMimeType(ContentService.MimeType.JSON);
     }
 
     const ss = SpreadsheetApp.openById(SHEET_ID);
 
-    switch (payload.type) {
-      case 'register':
-        appendRegisterRow(ss, payload);
-        break;
-      case 'login':
-        appendLoginRow(ss, payload);
-        break;
-      case 'membership':
-        appendMembershipRow(ss, payload);
-        break;
+    switch (data.type) {
+      case 'register':   appendRegisterRow(ss, data);   break;
+      case 'login':      appendLoginRow(ss, data);      break;
+      case 'membership': appendMembershipRow(ss, data); break;
       default:
-        throw new Error('Unknown type: ' + payload.type);
+        throw new Error('Unknown type: ' + data.type);
     }
 
     result.success = true;
@@ -63,66 +46,62 @@ function doPost(e) {
     result.error = error.message;
   }
 
-  // Return with permissive CORS headers
   return ContentService
     .createTextOutput(JSON.stringify(result))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// ── Parsers ──────────────────────────────────────────
-
-function parseFormData(body) {
-  const result = {};
-  body.split('&').forEach(pair => {
-    const [key, value] = pair.split('=').map(decodeURIComponent);
-    result[key] = value;
-  });
-  return result;
+// ── Also handle POST just in case ───────────────────────────────────────────
+function doPost(e) {
+  return doGet(e);
 }
 
-// ── Row Writers ──────────────────────────────────────
+// ── Row Writers ──────────────────────────────────────────────────────────────
 
-function appendRegisterRow(ss, data) {
+function appendRegisterRow(ss, d) {
   const sheet = getOrCreateSheet(ss, 'Register');
-  ensureHeader(sheet, ['Timestamp', 'Name', 'Email', 'Password', 'Registered At']);
+  ensureHeader(sheet, ['Received At', 'Name', 'Email', 'Password', 'Registered At']);
   sheet.appendRow([
     new Date(),
-    data.name    || '',
-    data.email   || '',
-    data.password || '',
-    data.createdAt ? new Date(Number(data.createdAt)) : new Date()
+    d.name     || '',
+    d.email    || '',
+    d.password || '',
+    d.createdAt ? new Date(Number(d.createdAt)) : new Date()
   ]);
 }
 
-function appendLoginRow(ss, data) {
+function appendLoginRow(ss, d) {
   const sheet = getOrCreateSheet(ss, 'Login');
-  ensureHeader(sheet, ['Timestamp', 'Email', 'Login Time', 'Status']);
+  ensureHeader(sheet, ['Received At', 'Email', 'Login Time', 'Status']);
   sheet.appendRow([
     new Date(),
-    data.email   || '',
-    data.timestamp ? new Date(Number(data.timestamp)) : new Date(),
-    data.status  || ''
+    d.email  || '',
+    d.timestamp ? new Date(Number(d.timestamp)) : new Date(),
+    d.status || ''
   ]);
 }
 
-function appendMembershipRow(ss, data) {
+function appendMembershipRow(ss, d) {
   const sheet = getOrCreateSheet(ss, 'Membership');
-  ensureHeader(sheet, ['Timestamp', 'Full Name', 'Email', 'Phone', 'Blood Group', 'DOB', 'Gender', 'Plan', 'Payment Method', 'Submitted At']);
+  ensureHeader(sheet, [
+    'Received At', 'Full Name', 'Email', 'Phone',
+    'Blood Group', 'DOB', 'Gender', 'Plan', 'Payment Method', 'Submitted At'
+  ]);
   sheet.appendRow([
     new Date(),
-    data.fullName      || '',
-    data.email         || '',
-    data.phone         || '',
-    data.bloodGroup    || '',
-    data.dob           || '',
-    data.gender        || '',
-    data.plan          || '',
-    data.paymentMethod || 'online',
-    data.submittedAt ? new Date(Number(data.submittedAt)) : new Date()
+    d.fullName      || '',
+    d.email         || '',
+    d.phone         || '',
+    d.bloodGroup    || '',
+    d.dob           || '',
+    d.gender        || '',
+    d.plan          || '',
+    d.paymentMethod || 'online',
+    d.submittedAt   ? new Date(Number(d.submittedAt)) : new Date()
   ]);
 }
 
-// ── Helpers ───────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function getOrCreateSheet(ss, name) {
   return ss.getSheetByName(name) || ss.insertSheet(name);
@@ -130,10 +109,11 @@ function getOrCreateSheet(ss, name) {
 
 function ensureHeader(sheet, headers) {
   if (sheet.getLastRow() === 0) {
-    const headerRange = sheet.getRange(1, 1, 1, headers.length);
-    headerRange.setValues([headers]);
-    headerRange.setBackground('#e8192c');
-    headerRange.setFontColor('#ffffff');
-    headerRange.setFontWeight('bold');
+    const range = sheet.getRange(1, 1, 1, headers.length);
+    range.setValues([headers]);
+    range.setBackground('#e8192c');
+    range.setFontColor('#ffffff');
+    range.setFontWeight('bold');
+    sheet.setFrozenRows(1);
   }
 }
