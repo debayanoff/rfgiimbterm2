@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting...</title>
     <script>
-        // Redirect to the new unified registration page
-        const urlParams = new URLSearchParams(window.location.search);
-        const plan = urlParams.get('plan');
-        const target = plan ? `register.html?plan=${plan}` : 'register.html';
-        window.location.href = target;
+        // Redirect to the new consolidated registration page
+        // Pass any existing query parameters (like ?plan=elite)
+        window.location.href = 'register.html' + window.location.search;
     </script>
 </head>
 <body>
-    <p>Redirecting to the new registration page...</p>
+    <p>Redirecting to <a href="register.html">registration page</a>...</p>
 </body>
 </html>
