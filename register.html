@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raw Fitness Gym - Register</title>
+    <title>Join RAW FITNESS GYM — Register & Membership</title>
+    <meta name="description" content="Create your account and apply for membership at RAW FITNESS GYM. One place to start your transformation." />
     <link rel="stylesheet" href="register.css">
     <script src="google-sheets.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -12,85 +13,266 @@
     <div class="register-container">
         <div class="register-card">
             <div class="register-header">
-                <h2>Create Account</h2>
-                <p>Join Raw Fitness Gym and start your journey today.</p>
+                <h2>Join The Elite</h2>
+                <p>One step away from your permanent transformation.</p>
             </div>
-            <form id="registerForm" action="#" method="POST" class="register-form">
+
+            <form id="unifiedRegisterForm" class="register-form">
+                
+                <!-- SECTION 1: ACCOUNT ACCESS -->
+                <div class="form-section-title">Account Credentials</div>
                 <div class="input-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    <input type="text" id="name" placeholder="Enter your full name" required>
                 </div>
                 <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
                 </div>
+                <div class="row-group">
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Create password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm password" required>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: PERSONAL PROFILE -->
+                <div class="form-section-title">Personal Profile</div>
+                <div class="row-group">
+                    <div class="input-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="10-digit mobile number" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="bloodGroup">Blood Group</label>
+                        <select id="bloodGroup" required>
+                            <option value="" disabled selected>Select blood group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row-group">
+                    <div class="input-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" id="dob" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row-group">
+                    <div class="input-group">
+                        <label for="emergency">Emergency Contact</label>
+                        <input type="tel" id="emergency" placeholder="Guardian/Relative number" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="legalIdType">Legal ID Type</label>
+                        <select id="legalIdType" required>
+                            <option value="" disabled selected>Select ID type</option>
+                            <option value="Aadhaar">Aadhaar</option>
+                            <option value="PAN">PAN Card</option>
+                            <option value="Voter ID">Voter ID</option>
+                            <option value="Driving License">Driving License</option>
+                            <option value="Passport">Passport</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                    <label for="legalIdNumber">Legal ID Number</label>
+                    <input type="text" id="legalIdNumber" placeholder="Enter your ID number" required>
                 </div>
+
                 <div class="input-group">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                    <label for="fullAddress">Full Address</label>
+                    <textarea id="fullAddress" rows="3" placeholder="Enter your complete residential address" required></textarea>
                 </div>
-                <button type="submit" class="register-btn">Sign Up</button>
+
+                <!-- SECTION 3: MEMBERSHIP & PAYMENT -->
+                <div class="form-section-title">Membership &amp; Payment</div>
+                <div class="input-group">
+                    <label for="planSelect">Choose Membership Plan</label>
+                    <select id="planSelect" required>
+                        <option value="starter">Starter Membership (Monthly) - ₹999</option>
+                        <option value="power">Power Membership (Quarterly) - ₹2,499</option>
+                        <option value="elite">Elite Membership (Half Yearly) - ₹4,499</option>
+                        <option value="champion">Champion Membership (Yearly) - ₹7,999</option>
+                    </select>
+                </div>
+
+                <div class="payment-method-group">
+                    <label class="payment-option" id="optOnline">
+                        <input type="radio" name="paymentMethod" value="online" checked>
+                        <span class="pm-icon">📲</span>
+                        <div>
+                            <strong>Pay Online (UPI)</strong>
+                            <p>Instant activation via UPI or Card.</p>
+                        </div>
+                    </label>
+                    <label class="payment-option" id="optOffline">
+                        <input type="radio" name="paymentMethod" value="offline">
+                        <span class="pm-icon">🏦</span>
+                        <div>
+                            <strong>Offline Payment</strong>
+                            <p>Pay cash/card at the gym counter.</p>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="terms-check">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the <a href="terms.html">Terms &amp; Gym Policies</a>.</label>
+                </div>
+
+                <button type="submit" class="register-btn" id="submitBtn">Create Account &amp; Proceed →</button>
             </form>
+
             <div id="registerMessage" class="form-message"></div>
+
             <div class="register-footer">
                 <p>Already have an account? <a href="login.html">Log in here</a></p>
-                <p class="footer-terms">View our <a href="terms.html">Terms & Conditions</a>.</p>
-                <a href="index.html" class="back-link">← Back to Home</a>
+                <a href="index.html" class="back-link">← Cancel and Back to Home</a>
             </div>
         </div>
     </div>
 
     <script>
-        const registerForm = document.getElementById('registerForm');
-        const registerMessage = document.getElementById('registerMessage');
+        const form = document.getElementById('unifiedRegisterForm');
+        const msg = document.getElementById('registerMessage');
+        const submitBtn = document.getElementById('submitBtn');
 
-        function showRegisterMessage(text, isError = true) {
-            registerMessage.textContent = text;
-            registerMessage.style.color = isError ? '#ff6b6b' : '#7ce3a3';
-            registerMessage.style.margin = '16px 0';
+        function showMessage(text, isError = true) {
+            msg.textContent = text;
+            msg.style.color = isError ? '#ff6b6b' : '#7ce3a3';
+            msg.style.margin = '16px 0';
         }
 
-        registerForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+        // Auto-select plan from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlPlan = urlParams.get('plan');
+        if (urlPlan) {
+            const select = document.getElementById('planSelect');
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value === urlPlan) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // Handle button label for payment method
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'offline') {
+                    submitBtn.textContent = 'Create Account & Pay at Gym →';
+                    submitBtn.style.background = '#1a6e3c';
+                } else {
+                    submitBtn.textContent = 'Create Account & Proceed →';
+                    submitBtn.style.background = '';
+                }
+            });
+        });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+            const confirm = document.getElementById('confirm-password').value;
+            const plan = document.getElementById('planSelect').value;
+            const payment = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-            if (password !== confirmPassword) {
-                showRegisterMessage('Passwords do not match. Please try again.');
+            // 1. Validate
+            if (password !== confirm) {
+                showMessage('Passwords do not match.');
                 return;
             }
 
             const users = JSON.parse(localStorage.getItem('rawRegisteredUsers') || '[]');
-            const exists = users.some((user) => user.email === email);
-            if (exists) {
-                showRegisterMessage('This email is already registered. Please log in instead.');
+            if (users.some(u => u.email === email)) {
+                showMessage('This email is already registered. Please log in.');
                 return;
             }
 
-            users.unshift({
-                name,
-                email,
-                password,
-                createdAt: Date.now()
-            });
-            localStorage.setItem('rawRegisteredUsers', JSON.stringify(users));
-            sendGoogleSheetRow({
-              type: 'register',
-              name,
-              email,
-              password,
-              createdAt: Date.now()
-            });
-            localStorage.setItem('currentUser', JSON.stringify({name, email}));
-            showRegisterMessage('Registration successful! Redirecting to membership...', false);
-            setTimeout(() => {
-              window.location.href = 'membership.html';
-            }, 700);
+            showMessage('Processing...', false);
+            submitBtn.disabled = true;
+
+            try {
+                const now = Date.now();
+
+                // 2. Prepare Payloads
+                const userObj = { type: 'register', name, email, password, createdAt: now };
+                const membershipObj = {
+                    type: 'membership',
+                    fullName: name,
+                    email: email,
+                    phone: document.getElementById('phone').value.trim(),
+                    bloodGroup: document.getElementById('bloodGroup').value,
+                    dob: document.getElementById('dob').value,
+                    gender: document.getElementById('gender').value,
+                    emergency: document.getElementById('emergency').value.trim(),
+                    legalIdType: document.getElementById('legalIdType').value,
+                    legalIdNumber: document.getElementById('legalIdNumber').value.trim(),
+                    fullAddress: document.getElementById('fullAddress').value.trim(),
+                    plan: plan,
+                    paymentMethod: payment,
+                    submittedAt: now
+                };
+
+                // 3. Save Locally
+                users.unshift({ name, email, password, createdAt: now });
+                localStorage.setItem('rawRegisteredUsers', JSON.stringify(users));
+
+                const memberships = JSON.parse(localStorage.getItem('rawMembershipEntries') || '[]');
+                memberships.unshift(membershipObj);
+                localStorage.setItem('rawMembershipEntries', JSON.stringify(memberships));
+
+                // 4. Single session setup
+                localStorage.setItem('currentUser', JSON.stringify({ name, email }));
+
+                // 5. Send to Google Sheets (Parallel)
+                await Promise.all([
+                    sendGoogleSheetRow(userObj),
+                    sendGoogleSheetRow(membershipObj)
+                ]);
+
+                // 6. Redirect
+                showMessage('Welcome to the RAW community! Redirecting...', false);
+                
+                setTimeout(() => {
+                    if (payment === 'offline') {
+                        localStorage.setItem('postLoginRedirect', 'user-dashboard.html');
+                        window.location.href = 'login.html?offline=1';
+                    } else {
+                        window.location.href = 'payment.html?plan=' + plan;
+                    }
+                }, 1000);
+
+            } catch (err) {
+                console.error(err);
+                showMessage('Something went wrong. Please try again.');
+                submitBtn.disabled = false;
+            }
         });
     </script>
 </body>
