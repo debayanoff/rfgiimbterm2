@@ -7,6 +7,7 @@
   <meta name="description" content="Admin data dashboard for RAW FITNESS GYM — view stored registrations, logins, and membership entries." />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="google-sheets.js"></script>
   <style>
     /* ── DATA PAGE SPECIFIC ── */
     .data-hero {
@@ -378,15 +379,21 @@
     }
 
     function badge(status) {
-      const cls = status === 'Success' ? 'status-success' : 'status-failure';
-      return `<span class="status-badge ${cls}">${status}</span>`;
+      const s = String(status || '').toLowerCase();
+      const cls = s === 'success' ? 'status-success' : 'status-failure';
+      return `<span class="status-badge ${cls}">${status || 'Unknown'}</span>`;
     }
 
-    function unlockData() {
+    async function unlockData() {
       dataContent.hidden = false;
-      const users = JSON.parse(localStorage.getItem('rawRegisteredUsers') || '[]');
-      const history = JSON.parse(localStorage.getItem('rawLoginHistory') || '[]');
-      const membership = JSON.parse(localStorage.getItem('rawMembershipEntries') || '[]');
+      
+      // Fetch live data from Google Sheets
+      const liveData = await fetchLiveSheetData();
+      
+      // Use live data if available, fallback to localStorage
+      const users = (liveData && liveData.register) ? liveData.register : JSON.parse(localStorage.getItem('rawRegisteredUsers') || '[]');
+      const history = (liveData && liveData.login) ? liveData.login : JSON.parse(localStorage.getItem('rawLoginHistory') || '[]');
+      const membership = (liveData && liveData.membership) ? liveData.membership : JSON.parse(localStorage.getItem('rawMembershipEntries') || '[]');
 
       document.getElementById('summaryUsers').textContent = users.length;
       document.getElementById('summaryLogins').textContent = history.length;
@@ -398,27 +405,27 @@
 
       renderTable('usersTable', users, (u, i) => `
         <td>${i}</td>
-        <td style="color:var(--white);font-weight:600">${u.name}</td>
-        <td>${u.email}</td>
-        <td style="font-family:monospace;font-size:12px">${u.password}</td>
-        <td>${fmt(u.createdAt)}</td>
+        <td style="color:var(--white);font-weight:600">${u.name || u.Name || '—'}</td>
+        <td>${u.email || u.Email || '—'}</td>
+        <td style="font-family:monospace;font-size:12px">${u.password || u.Password || '—'}</td>
+        <td>${u.registeredAt ? fmt(u.registeredAt) : (u.RegisteredAt ? fmt(u.RegisteredAt) : '—')}</td>
       `);
 
       renderTable('loginTable', history, (e, i) => `
         <td>${i}</td>
-        <td>${e.email}</td>
-        <td>${fmt(e.timestamp)}</td>
-        <td>${badge(e.status)}</td>
+        <td>${e.email || e.Email || '—'}</td>
+        <td>${e.loginTime ? fmt(e.loginTime) : (e.Timestamp ? fmt(e.Timestamp) : '—')}</td>
+        <td>${badge(e.status || e.Status)}</td>
       `);
 
       renderTable('membershipTable', membership, (e, i) => `
         <td>${i}</td>
-        <td style="color:var(--white);font-weight:600">${e.fullName}</td>
-        <td>${e.email}</td>
-        <td>${e.phone}</td>
-        <td style="color:var(--red);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px">${e.plan}</td>
-        <td>${e.paymentMethod || 'online'}</td>
-        <td>${fmt(e.submittedAt)}</td>
+        <td style="color:var(--white);font-weight:600">${e.fullName || e.FullName || '—'}</td>
+        <td>${e.email || e.Email || '—'}</td>
+        <td>${e.phone || e.Phone || '—'}</td>
+        <td style="color:var(--red);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px">${e.plan || e.Plan || '—'}</td>
+        <td>${e.paymentMethod || e.PaymentMethod || 'online'}</td>
+        <td>${e.submittedAt ? fmt(e.submittedAt) : (e.SubmittedAt ? fmt(e.SubmittedAt) : '—')}</td>
       `);
 
       document.getElementById('usersEmpty').style.display = users.length ? 'none' : 'block';

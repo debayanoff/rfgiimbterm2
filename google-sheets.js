@@ -30,3 +30,23 @@ function sendGoogleSheetRow(payload) {
     console.warn('Google Sheets sync error:', err);
   }
 }
+
+/**
+ * Fetches all live data from the Google Sheet for the Admin Panel.
+ */
+async function fetchLiveSheetData() {
+  if (!GOOGLE_SHEETS_WEB_APP || GOOGLE_SHEETS_WEB_APP.includes('REPLACE_WITH')) {
+    console.warn('Google Sheets URL not configured.');
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${GOOGLE_SHEETS_WEB_APP}?action=readAllData`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const result = await response.json();
+    return result.success ? result : null;
+  } catch (err) {
+    console.error('Fetch live data error:', err);
+    return null;
+  }
+}

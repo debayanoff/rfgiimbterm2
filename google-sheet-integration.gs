@@ -22,6 +22,18 @@ function doGet(e) {
 
   try {
     const data = e.parameter || {};
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+
+    // ── FETCH LIVE DATA FOR ADMIN ──
+    if (data.action === 'readAllData') {
+      const output = {
+        success: true,
+        register: getSheetDataAsJson(ss, 'Register'),
+        login: getSheetDataAsJson(ss, 'Login'),
+        membership: getSheetDataAsJson(ss, 'Membership')
+      };
+      return ContentService.createTextOutput(JSON.stringify(output)).setMimeType(ContentService.MimeType.JSON);
+    }
 
     if (!data.type) {
       // If no type param, return a simple health-check response
@@ -29,8 +41,6 @@ function doGet(e) {
         .createTextOutput(JSON.stringify({ status: 'RAW FITNESS GYM sheet is live' }))
         .setMimeType(ContentService.MimeType.JSON);
     }
-
-    const ss = SpreadsheetApp.openById(SHEET_ID);
 
     switch (data.type) {
       case 'register':   appendRegisterRow(ss, data);   break;
@@ -54,6 +64,26 @@ function doGet(e) {
 // ── Also handle POST just in case ───────────────────────────────────────────
 function doPost(e) {
   return doGet(e);
+}
+
+// ── Data Reader Helper ───────────────────────────────────────────────────────
+
+function getSheetDataAsJson(ss, sheetName) {
+  const sheet = ss.getSheetByName(sheetName);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+  const rows = sheet.getDataRange().getValues();
+  const headers = rows[0];
+  
+  return rows.slice(1).map(row => {
+    const obj = {};
+    headers.forEach((h, i) => {
+      // Map sheet headers to consistent JS keys
+      let key = h.replace(/ /g, '').replace(/^[A-Z]/, c => c.toLowerCase());
+      // Handle the "Received At" header manually or keep as is
+      obj[key] = row[i];
+    });
+    return obj;
+  });
 }
 
 // ── Row Writers ──────────────────────────────────────────────────────────────
